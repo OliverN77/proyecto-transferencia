@@ -1,4 +1,4 @@
-# Titulo ydescripcion
+# Titulo y descripcion
 NOmbre del proyecto y una breve explicacio  de que hace y por que es util
 
 # Estructura del proyecto
