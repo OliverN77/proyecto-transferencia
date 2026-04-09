@@ -8,6 +8,8 @@ def validate_email():
             if "@" in email and "." in email:
                 print("Correo válido.")
                 return email
+            else:
+                print("Correo no válido. Asegúrese de incluir '@' y un '.'")
         except ValueError:
             print("Por favor, ingrese un correo válido.")
 
@@ -30,6 +32,8 @@ def validate_status():
             if status in ["activo", "inactivo"]:
                 print("Estado válido.")
                 return status
+            else:
+                print("Estado no válido. Ingrese 'activo' o 'inactivo'.")
         except ValueError:
             print("Por favor, ingrese un estado válido.")
 

@@ -2,6 +2,7 @@ import validate
 from service import new_register, list_records, search_records, update_record, delete_record
 from file import load_data, save_data
 from colorama import Fore, Style
+from integration import export_to_csv, generate_report
 
 def load_users_into_memory():
     """Sincroniza usuarios e id_counter desde el archivo JSON."""
@@ -32,7 +33,9 @@ def main_menu():
         print(f"{Fore.YELLOW}4.{Style.RESET_ALL} Actualizar usuario")
         print(f"{Fore.YELLOW}5.{Style.RESET_ALL} Eliminar usuario")
         print(f"{Fore.YELLOW}6.{Style.RESET_ALL} Guardar datos")
-        print(f"{Fore.RED}7.{Style.RESET_ALL} Salir")
+        print(f"{Fore.YELLOW}7.{Style.RESET_ALL} Generar Reporte")
+        print(f"{Fore.YELLOW}8.{Style.RESET_ALL} Exportar a CSV")
+        print(f"{Fore.RED}9.{Style.RESET_ALL} Salir")
 
         option = input(f"\n{Fore.GREEN}Seleccione una opción: {Style.RESET_ALL}")
 
@@ -56,6 +59,10 @@ def main_menu():
             else:
                 print(f"{Fore.RED}✗ No se pudieron guardar los datos.{Style.RESET_ALL}")
         elif option == "7":
+            generate_report(validate.users)
+        elif option == "8":
+            export_to_csv(validate.users)
+        elif option == "9":
             print(f"{Fore.CYAN}Saliendo del programa...{Style.RESET_ALL}")
             break
         else:

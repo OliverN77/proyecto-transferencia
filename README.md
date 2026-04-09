@@ -12,6 +12,8 @@ Un sistema de gestión de usuarios basado en consola que demuestra **operaciones
 - ✏️ **Actualizar Usuarios** — Modificar detalles del usuario (nombre, email, edad, estado)
 - 🗑️ **Eliminar Usuarios** — Eliminar usuarios del sistema
 - 💾 **Persistencia de Datos** — Guardar y cargar datos de usuarios desde JSON con manejo de errores
+- 📊 **Reportes con Pandas** — Generar reportes filtrados y agrupados con análisis de datos
+- 📥 **Exportar a CSV** — Exportar registros a archivos CSV con filtrado y ordenamiento avanzado
 - 🎓 **Arquitectura Limpia** — Separación de responsabilidades con módulos dedicados para servicio, validación y capas de datos
 
 ---
@@ -20,7 +22,7 @@ Un sistema de gestión de usuarios basado en consola que demuestra **operaciones
 
 ### Requisitos Previos
 - **Python 3.10** o superior
-- Sin dependencias externas (utiliza solo la biblioteca estándar de Python)
+- **Dependencias externas** listadas en `requirements.txt`
 
 ### Instalación
 
@@ -30,7 +32,17 @@ git clone https://github.com/yourusername/gestion-info.git
 cd gestion-info
 ```
 
-2. **Ejecutar la aplicación**
+2. **Instalar dependencias**
+```bash
+pip install -r requirements.txt
+```
+
+Este comando instalará:
+- **pandas** — para análisis de datos y exportación a CSV
+- **colorama** — para estilos de color en consola
+- **openpyxl** — soporte para reportes en Excel
+
+3. **Ejecutar la aplicación**
 ```bash
 python src/main.py
 ```
@@ -40,23 +52,47 @@ python src/main.py
 Una vez que se inicializa la aplicación, verás un menú interactivo:
 
 ```
-=== MENÚ PRINCIPAL ===
-1. Registrar usuario
+========================================
+Menú de Gestión de Usuarios
+========================================
+1. Crear usuario
 2. Listar registros
-3. Buscar usuario
+3. Buscar registros
 4. Actualizar usuario
 5. Eliminar usuario
-6. Guardar cambios
-0. Salir
+6. Guardar datos
+7. Generar Reporte
+8. Exportar a CSV
+9. Salir
 
-Selecciona una opción: 
+Seleccione una opción: 
 ```
 
 **Ejemplo de flujo de trabajo:**
 1. Selecciona la opción **1** para registrar un nuevo usuario
 2. Ingresa nombre, email, edad y estado
 3. Ver usuarios con la opción **2**
-4. Guardar cambios a JSON con la opción **6** antes de salir
+4. Generar reportes con la opción **7** (con filtros y agrupación disponibles)
+5. Exportar datos a CSV con la opción **8** (con opciones de filtrado avanzado)
+6. Guardar cambios a JSON con la opción **6** antes de salir
+
+---
+
+## 📊 Funcionalidades Avanzadas
+
+### Reportes (Opción 7)
+- **Reporte General** — Visualiza todos los usuarios con estadísticas
+- **Agrupado por Estado** — Agrupa usuarios por estado (activo/inactivo)
+- **Agrupado por Edad** — Agrupa usuarios por edad
+- **Solo Activos** — Filtra y muestra solo usuarios activos
+
+### Exportación a CSV (Opción 8)
+- **Exportación Completa** — Exporta todos los registros a `reporte_completo.csv`
+- **Usuarios Activos** — Exporta solo activos a `usuarios_activos.csv`
+- **Mayores de 18** — Exporta mayores de 18 años a `usuarios_mayores_18.csv`
+- **Personalizado** — Elige nombre, filtros, y columna para ordenar
+
+**Los archivos se guardan en la carpeta `data/`**
 
 ---
 
@@ -67,7 +103,7 @@ Selecciona una opción:
 ```
 gestion-info/
 ├─ README.md                    # Este archivo - documentación del proyecto
-├─ requirements.txt             # Dependencias del proyecto (vacío - Python puro)
+├─ requirements.txt             # Dependencias del proyecto (pandas, colorama, openpyxl)
 ├─ .gitignore                   # Reglas de ignorar archivos para Git
 ├─ data/
 │  └─ registros.json           # Archivo JSON con registros persistentes de usuarios
@@ -77,7 +113,7 @@ gestion-info/
    ├─ service.py               # Lógica empresarial - implementa operaciones CRUD
    ├─ file.py                  # Capa de datos - maneja persistencia en JSON
    ├─ validate.py              # Lógica de validación y funciones auxiliares
-   └─ integration.py            # Reservado para integraciones futuras (Faker, Pandas, etc.)
+   └─ integration.py            # Integraciones con librerías externas (Pandas, reportes)
 ```
 
 ### Responsabilidades de Módulos
@@ -179,11 +215,28 @@ Los usuarios se almacenan en `data/registros.json` en un formato JSON flexible y
 
 ## 💻 Detalles Técnicos
 
-### Dependencias
-- **Sin paquetes externos** — Utiliza solo la biblioteca estándar de Python 3.10+:
-  - `json` — Persistencia de datos
-  - `pathlib` — Operaciones del sistema de archivos
-  - Utilidades integradas para manipulación de datos
+### Dependencias Externas (requirements.txt)
+
+Este proyecto utiliza las siguientes librerías externas:
+
+```
+pandas>=2.0.0                   # Análisis de datos y manipulación de DataFrames
+colorama>=0.4.6                 # Estilos de color y formato en consola
+openpyxl>=3.1.0                 # Soporte para reportes en formato Excel
+```
+
+**Instalación de dependencias:**
+```bash
+pip install -r requirements.txt
+```
+
+Este comando instala automáticamente todas las versiones requeridas:
+
+| Librería | Versión | Propósito |
+|----------|---------|----------|
+| **pandas** | ≥2.0.0 | Análisis de datos, generación de reportes, exportación a CSV y Excel |
+| **colorama** | ≥0.4.6 | Colores y estilos en la salida de consola para mejor presentación |
+| **openpyxl** | ≥3.1.0 | Creación y manipulación de archivos Excel (.xlsx) |
 
 ### Persistencia de Datos
 - **Formato**: JSON (legible por humanos, fácil de inspeccionar y depurar)
