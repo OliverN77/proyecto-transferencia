@@ -1,4 +1,5 @@
-﻿#🧩 Ejercicio 6: Refactorizar procesamiento de ventas
+﻿#🧩 Ejercicio 6: Procesamiento de ventas con descuentos
+# OBJETIVO: Refactorizar procesamiento, validar datos, calcular totales
 
 def calculate_sale_total(venta: dict) -> float:
     """Calcula total de una venta con descuentos aplicados."""
@@ -36,39 +37,63 @@ def report_invalid_sales(ventas: list) -> None:
         print("No hay ventas inválidas.")
 
 
-# =============================================================================
-# PRUEBAS
-# =============================================================================
+def menu_procesamiento_ventas():
+    """Menú de pruebas para el procesamiento de ventas."""
+    print("\n--- PROCESAMIENTO DE VENTAS ---\n")
+    
+    # Test cases
+    test_cases = [
+        {
+            "nombre": "Suma correcta",
+            "ventas": [
+                {"status": "ok", "price": 100, "quantity": 1, "customer": "regular"},
+                {"status": "ok", "price": 50, "quantity": 1, "customer": "regular"}
+            ],
+            "esperado": 150.0
+        },
+        {
+            "nombre": "Descuento por cantidad (10%)",
+            "ventas": [{"status": "ok", "price": 100, "quantity": 10, "customer": "regular"}],
+            "esperado": 900.0
+        },
+        {
+            "nombre": "Descuento VIP (15% total)",
+            "ventas": [{"status": "ok", "price": 100, "quantity": 10, "customer": "vip"}],
+            "esperado": 850.0
+        },
+        {
+            "nombre": "Ignora ventas inválidas",
+            "ventas": [
+                {"status": "ok", "price": 100, "quantity": 1, "customer": "regular"},
+                {"status": "cancelled", "price": 50, "quantity": 1, "customer": "regular"},
+                {"status": "ok", "price": 25, "quantity": 1, "customer": "regular"}
+            ],
+            "esperado": 125.0
+        }
+    ]
+    
+    print("Ejecutando tests...\n")
+    passed = 0
+    
+    for i, test in enumerate(test_cases, 1):
+        resultado = calculate_total(test["ventas"])
+        es_correcto = resultado == test["esperado"]
+        status = "✓" if es_correcto else "❌"
+        
+        print(f"{status} Test {i}: {test['nombre']}")
+        print(f"   Resultado: {resultado}, Esperado: {test['esperado']}")
+        
+        if es_correcto:
+            passed += 1
+    
+    print(f"\n_________________________________")
+    print(f"Resultado: {passed}/{len(test_cases)} pruebas pasadas\n")
+    
+    # Reporte de ventas
+    print("Reporte de ventas del último test:")
+    report_invalid_sales(test_cases[-1]["ventas"])
+    print()
+
 
 if __name__ == "__main__":
-    # Test 1: Suma correcta
-    ventas = [
-        {"status": "ok", "price": 100, "quantity": 1, "customer": "regular"},
-        {"status": "ok", "price": 50, "quantity": 1, "customer": "regular"}
-    ]
-    assert calculate_total(ventas) == 150.0
-    print("✓ Test 1: Suma correcta")
-    
-    # Test 2: Descuento por cantidad
-    ventas = [{"status": "ok", "price": 100, "quantity": 10, "customer": "regular"}]
-    assert calculate_total(ventas) == 900.0
-    print("✓ Test 2: Descuento cantidad (10%)")
-    
-    # Test 3: Descuento VIP
-    ventas = [{"status": "ok", "price": 100, "quantity": 10, "customer": "vip"}]
-    assert calculate_total(ventas) == 850.0
-    print("✓ Test 3: Descuento VIP (15% total)")
-    
-    # Test 4: Ignora inválidas
-    ventas = [
-        {"status": "ok", "price": 100, "quantity": 1, "customer": "regular"},
-        {"status": "cancelled", "price": 50, "quantity": 1, "customer": "regular"},
-        {"status": "ok", "price": 25, "quantity": 1, "customer": "regular"}
-    ]
-    assert calculate_total(ventas) == 125.0
-    print("✓ Test 4: Ignora ventas inválidas")
-    
-    # Test 5: Reporte
-    report_invalid_sales(ventas)
-    
-    print("\nTODOS LOS TESTS PASARON ✓")
+    menu_procesamiento_ventas()

@@ -1,49 +1,43 @@
-# # Ejercicio 4: 
-# Analiza el siguiente “código existente” y realiza un -> refactor <-, tener en cuenta los 
-# problemas que se plantean al final.
+# 🧩 Ejercicio 4: Calculadora refactorizada
+# OBJETIVO: Función clara, manejo de errores, operaciones seguras
 
-# Código original (difícil de mantener)
+def realizar_operacion(a: float, b: float, op: str) -> float:
+    """Realiza operaciones aritméticas básicas."""
+    ops = {
+        "suma": lambda x, y: x + y,
+        "resta": lambda x, y: x - y,
+        "multiplicacion": lambda x, y: x * y,
+        "division": lambda x, y: x / y if y != 0 else (_ for _ in ()).throw(
+            ZeroDivisionError("No se puede dividir entre cero.")
+        )
+    }
+    
+    if op not in ops:
+        raise ValueError(f"Operación '{op}' no válida. Use: {', '.join(ops.keys())}")
+    
+    return ops[op](a, b)
 
-def calc(a, b, op):
+
+def menu_calculadora():
+    """Menú interactivo para la calculadora."""
+    print("\n--- CALCULADORA ---")
+    print("Operaciones disponibles: suma, resta, multiplicacion, division\n")
+    
     try:
-        ops = {
-            "suma": lambda x, y: x + y,
-            "resta": lambda x, y: x - y,
-            "multiplicacion": lambda x, y: x * y,
-            "division": lambda x, y: x / y if y != 0 else (_ for _ in ()).throw(ZeroDivisionError("No se puede dividir entre cero."))
-        }
+        a = float(input("Ingrese el primer número: "))
+        b = float(input("Ingrese el segundo número: "))
+        op = input("Ingrese la operación (suma, resta, multiplicacion, division): ").strip().lower()
         
-        if op not in ops:
-            raise ValueError(f"Operación '{op}' no válida.")
-        
-        func = ops[op]
-        return func(a, b)
+        resultado = realizar_operacion(a, b, op)
+        print(f"\n✓ El resultado de {a} {op} {b} = {resultado}\n")
     
-    except ZeroDivisionError as e:
-        print(f"Error: {e}")
-        return None
     except ValueError as e:
-        print(f"Error: {e}")
-        return None
+        print(f"\n❌ Error: {e}\n")
+    except ZeroDivisionError as e:
+        print(f"\n❌ Error: {e}\n")
     except Exception as e:
-        print(f"Error inesperado: {e}")
-        return None
+        print(f"\n❌ Error inesperado: {e}\n")
 
-try:
-    a = int(input("Ingrese el primer número: "))
-    b = int(input("Ingrese el segundo número: "))
-    op = str(input("Ingrese la operación (suma, resta, multiplicacion, division): "))
-    
-    result = calc(a, b, op)
-    if result is not None:
-        print(f"El resultado de la {op} es: {result}")
-except ValueError:
-    print("Error: Ingrese números válidos.")
-except Exception as e:
-    print(f"Error: {e}")
 
-# Problemas:
-# • Retorna "error" (string) o números → mezcla de tipos (confuso)
-# • op con letras “mágicas”
-# • No deja claro qué errores existen
-# • Difícil testear los errores bien
+if __name__ == "__main__":
+    menu_calculadora()

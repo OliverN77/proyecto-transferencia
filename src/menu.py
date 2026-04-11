@@ -1,8 +1,20 @@
+import sys
+from pathlib import Path
 import validate
 from service import new_register, list_records, search_records, update_record, delete_record
 from file import load_data, save_data
 from colorama import Fore, Style
 from integration import export_to_csv, generate_report
+
+# Agregar la carpeta assets al path de Python para importar menu_ejercicios
+assets_path = str(Path(__file__).parent.parent / "assets")
+sys.path.insert(0, assets_path)
+
+try:
+    from menu_ejercicios import main as ejecutar_ejercicios
+except ImportError as e:
+    print(f"Advertencia: No se pudo cargar el módulo de ejercicios: {e}")
+    ejecutar_ejercicios = None
 
 def load_users_into_memory():
     """Sincroniza usuarios e id_counter desde el archivo JSON."""
@@ -35,7 +47,8 @@ def main_menu():
         print(f"{Fore.YELLOW}6.{Style.RESET_ALL} Guardar datos")
         print(f"{Fore.YELLOW}7.{Style.RESET_ALL} Generar Reporte")
         print(f"{Fore.YELLOW}8.{Style.RESET_ALL} Exportar a CSV")
-        print(f"{Fore.RED}9.{Style.RESET_ALL} Salir")
+        print(f"{Fore.YELLOW}9.{Style.RESET_ALL} Ejercicios Python")
+        print(f"{Fore.RED}0.{Style.RESET_ALL} Salir")
 
         option = input(f"\n{Fore.GREEN}Seleccione una opción: {Style.RESET_ALL}")
 
@@ -63,6 +76,12 @@ def main_menu():
         elif option == "8":
             export_to_csv(validate.users)
         elif option == "9":
+            if ejecutar_ejercicios:
+                print(f"\n{Fore.CYAN}Abriendo menú de ejercicios...{Style.RESET_ALL}")
+                ejecutar_ejercicios()
+            else:
+                print(f"{Fore.RED}✗ No se pudo cargar el módulo de ejercicios.{Style.RESET_ALL}")
+        elif option == "0":
             print(f"{Fore.CYAN}Saliendo del programa...{Style.RESET_ALL}")
             break
         else:
